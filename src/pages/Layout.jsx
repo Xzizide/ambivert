@@ -8,9 +8,7 @@ export default function Layout() {
     <>
       <div className="flex flex-col min-h-screen">
         <Header></Header>
-        <div className="flex-auto">
-          <Outlet></Outlet>
-        </div>
+        <Outlet></Outlet>
         <Footer></Footer>
       </div>
     </>
