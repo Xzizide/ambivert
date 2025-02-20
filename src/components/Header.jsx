@@ -3,11 +3,27 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <header className="flex justify-evenly">
-      <Link to="/">
-        <img src="src/assets/logo.png" alt="" />
-      </Link>
-      <Link to="/hello">Hello</Link>
+    <header>
+      <nav className="flex justify-evenly p-2">
+        <Link to="/">
+          <img src="src/assets/logo.png" alt="" className="w-60" />
+        </Link>
+        <div className="p-10 flex justify-evenly w-100">
+          <Link
+            to="/hello"
+            className="text-3xl text-red-300 hover:underline hover:text-red-500"
+          >
+            Hello
+          </Link>
+          <Link
+            to="/hello"
+            className="text-3xl text-red-300 hover:underline hover:text-red-500"
+          >
+            Hello
+          </Link>
+        </div>
+      </nav>
+      <hr className="border-gray-300"></hr>
     </header>
   );
 }
