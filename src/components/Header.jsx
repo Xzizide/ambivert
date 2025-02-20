@@ -10,10 +10,10 @@ export default function Header() {
         </Link>
         <div className="p-10 flex justify-evenly w-100">
           <Link
-            to="/hello"
+            to="/chat"
             className="text-3xl text-red-300 hover:underline hover:text-red-500"
           >
-            Hello
+            To chatroom
           </Link>
           <Link
             to="/hello"
