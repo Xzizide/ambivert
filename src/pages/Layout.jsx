@@ -6,9 +6,13 @@ import Footer from "../components/Footer";
 export default function Layout() {
   return (
     <>
-      <Header></Header>
-      <Outlet></Outlet>
-      <Footer></Footer>
+      <div className="flex flex-col min-h-screen">
+        <Header></Header>
+        <div className="flex-auto">
+          <Outlet></Outlet>
+        </div>
+        <Footer></Footer>
+      </div>
     </>
   );
 }
