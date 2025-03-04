@@ -1,5 +1,18 @@
 import React from "react";
+import { useRef, useEffect } from "react";
 
 export default function VideoFrame() {
-  return <input capture></input>;
+  const camera_ref = useRef();
+
+  useEffect(() => {
+    navigator.mediaDevices
+      .getUserMedia({
+        video: true,
+      })
+      .then((stream) => {
+        camera_ref.current.srcObject = stream;
+        camera_ref.current.play();
+      });
+  }, []);
+  return <video ref={camera_ref}></video>;
 }
