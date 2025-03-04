@@ -14,5 +14,9 @@ export default function VideoFrame() {
         camera_ref.current.play();
       });
   }, []);
-  return <video ref={camera_ref}></video>;
+  return (
+    <div>
+      <video ref={camera_ref} className="border-2 rounded-2xl"></video>
+    </div>
+  );
 }
