@@ -16,7 +16,10 @@ export default function VideoFrame() {
   }, []);
   return (
     <div>
-      <video ref={camera_ref} className="border-2 rounded-2xl"></video>
+      <video
+        ref={camera_ref}
+        className="border-2 rounded-2xl bg-amber-500"
+      ></video>
     </div>
   );
 }
