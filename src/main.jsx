@@ -4,6 +4,7 @@ import "./index.css";
 import Layout from "./pages/Layout.jsx";
 import Home from "./pages/Home.jsx";
 import ChatRoom from "./pages/ChatRoom.jsx";
+import Register from "./pages/Register.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "/chat",
         element: <ChatRoom />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
     ],
   },
