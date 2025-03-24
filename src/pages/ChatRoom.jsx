@@ -1,11 +1,9 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
+import VideoFrame from "../components/VideoFrame";
 
 export default function ChatRoom() {
-  const localCamRef = useRef();
-  const remoteCamRef = useRef();
-
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState({});
 
   useEffect(() => {
     var client_id = Date.now();
@@ -34,14 +32,28 @@ export default function ChatRoom() {
 
     ws.onmessage = function (event) {
       if (typeof event.data === "string") {
-        var client_string = event.data;
-        client_string = client_string.replace("[", "").replace("]", "");
-        setClients(client_string.split(","));
-        console.log(clients);
+        var client_event = event.data;
+        client_event = client_event
+          .replace("[", "")
+          .replace("]", "")
+          .split(",");
+        if (client_event[0] === '"disconnect"') {
+          setClients((prev) => {
+            var client_id = client_event[1];
+            const { [client_id]: _, ...rest } = prev;
+            return rest;
+          });
+        }
       } else {
-        var blob = new Blob([event.data], { type: "video/webm; codecs=vp8" });
-        remoteCamRef.current.src = URL.createObjectURL(blob);
-        remoteCamRef.current.play();
+        var sending_id = event.data.slice(0, 13);
+        sending_id.text().then((text) => {
+          var blob_data = event.data.slice(13);
+          var blob = new Blob([blob_data], { type: "video/webm; codecs=vp8" });
+          setClients((prev) => ({
+            ...prev,
+            [text]: URL.createObjectURL(blob),
+          }));
+        });
       }
     };
   }, []);
@@ -49,13 +61,8 @@ export default function ChatRoom() {
   return (
     <main className="bg-amber-50 flex-auto flex">
       <div className="grid grid-cols-3 gap-3 m-3">
-        {clients.map(() => {
-          return (
-            <video
-              ref={remoteCamRef}
-              className="border-2 rounded-2xl bg-amber-500"
-            ></video>
-          );
+        {Object.entries(clients).map(([id, blob]) => {
+          return <VideoFrame key={id} src={blob}></VideoFrame>;
         })}
       </div>
       <div className="w-200 border rounded-2xl flex flex-col justify-between items-end">
