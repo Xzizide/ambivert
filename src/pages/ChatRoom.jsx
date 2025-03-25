@@ -109,6 +109,12 @@ export default function ChatRoom() {
     }
   };
 
+  const bottomMessagesRef = useRef();
+
+  useEffect(() => {
+    bottomMessagesRef.current?.scrollIntoView();
+  }, [messages]);
+
   return (
     <main className="bg-amber-50 flex-auto flex">
       <div className="grid grid-cols-3 gap-3 m-3">
@@ -120,7 +126,6 @@ export default function ChatRoom() {
       <div>
         <div className="max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden">
           <div className="p-4 h-64 overflow-y-auto">
-            {console.log(messages)}
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -133,6 +138,7 @@ export default function ChatRoom() {
                 {message.sender}: {message.text}
               </div>
             ))}
+            <div ref={bottomMessagesRef}></div>
           </div>
 
           <div className="flex p-4 border-t border-gray-200">
