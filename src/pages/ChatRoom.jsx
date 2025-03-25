@@ -5,10 +5,20 @@ import VideoFrame from "../components/VideoFrame";
 export default function ChatRoom() {
   const [clients, setClients] = useState({});
 
-  useEffect(() => {
-    var client_id = Date.now();
+  const [client_id, setClient_id] = useState();
 
-    var ws = new WebSocket(`ws://localhost:8000/ws/${client_id}`);
+  const [messages, setMessages] = useState([]);
+
+  const websocketRef = useRef();
+
+  useEffect(() => {
+    var date_client_id = Date.now();
+
+    setClient_id(date_client_id);
+
+    var ws = new WebSocket(`ws://localhost:8000/ws/${date_client_id}`);
+
+    websocketRef.current = ws;
 
     navigator.mediaDevices
       .getUserMedia({
@@ -44,19 +54,60 @@ export default function ChatRoom() {
             return rest;
           });
         }
-      } else {
-        var sending_id = event.data.slice(0, 13);
-        sending_id.text().then((text) => {
-          var blob_data = event.data.slice(13);
-          var blob = new Blob([blob_data], { type: "video/webm; codecs=vp8" });
-          setClients((prev) => ({
-            ...prev,
-            [text]: URL.createObjectURL(blob),
-          }));
-        });
+      } else if (typeof event.data === "object") {
+        event.data
+          .slice(22, 29)
+          .text()
+          .then((text) => {
+            if (text === "message") {
+              var message_blob = event.data.slice(13);
+              message_blob.text().then((message_content) => {
+                setMessages((prev) => [
+                  ...prev,
+                  JSON.parse(message_content).message,
+                ]);
+              });
+            } else {
+              var sending_id = event.data.slice(0, 13);
+              sending_id.text().then((text) => {
+                var blob_data = event.data.slice(13);
+                var blob = new Blob([blob_data], {
+                  type: "video/webm; codecs=vp8",
+                });
+                setClients((prev) => ({
+                  ...prev,
+                  [text]: URL.createObjectURL(blob),
+                }));
+              });
+            }
+          });
       }
     };
   }, []);
+
+  const [inputMessage, setInputMessage] = useState("");
+
+  const handleSendMessage = () => {
+    if (inputMessage.trim() === "") return;
+
+    const newMessage = {
+      id: Date.now(),
+      text: inputMessage,
+      sender: client_id,
+    };
+
+    websocketRef.current.send(
+      new Blob([JSON.stringify({ type: "message", message: newMessage })])
+    );
+
+    setInputMessage("");
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
 
   return (
     <main className="bg-amber-50 flex-auto flex">
@@ -65,18 +116,42 @@ export default function ChatRoom() {
           return <VideoFrame key={id} client_id={id} src={blob}></VideoFrame>;
         })}
       </div>
-      <div className="w-200 border rounded-2xl flex flex-col justify-between items-end">
-        <ul className="flex flex-col items-end">
-          <li>emil: hello</li>
-          <li>another: hi</li>
-          <li>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Dignissimos, numquam. Qui possimus eaque eum voluptatibus magni
-            quia. Hic suscipit eum ducimus sapiente, vel reprehenderit, ut
-            recusandae fugiat reiciendis, nobis tempora!
-          </li>
-        </ul>
-        <input type="text" name="" id="" className="w-120" />
+
+      <div>
+        <div className="max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden">
+          <div className="p-4 h-64 overflow-y-auto">
+            {console.log(messages)}
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`mb-2 p-2 rounded-lg max-w-[80%] ${
+                  message.sender === client_id
+                    ? "bg-blue-500 text-white self-end ml-auto"
+                    : "bg-gray-200 text-black mr-auto"
+                }`}
+              >
+                {message.sender}: {message.text}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex p-4 border-t border-gray-200">
+            <input
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Type a message..."
+              className="flex-grow mr-2 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              onClick={handleSendMessage}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              Send
+            </button>
+          </div>
+        </div>
       </div>
     </main>
   );
