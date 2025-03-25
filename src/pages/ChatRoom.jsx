@@ -62,7 +62,7 @@ export default function ChatRoom() {
     <main className="bg-amber-50 flex-auto flex">
       <div className="grid grid-cols-3 gap-3 m-3">
         {Object.entries(clients).map(([id, blob]) => {
-          return <VideoFrame key={id} src={blob}></VideoFrame>;
+          return <VideoFrame key={id} client_id={id} src={blob}></VideoFrame>;
         })}
       </div>
       <div className="w-200 border rounded-2xl flex flex-col justify-between items-end">
