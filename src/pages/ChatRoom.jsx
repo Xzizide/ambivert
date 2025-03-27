@@ -23,6 +23,7 @@ export default function ChatRoom() {
     navigator.mediaDevices
       .getUserMedia({
         video: true,
+        audio: true,
       })
       .then((stream) => {
         var mediaRecorder = new MediaRecorder(stream);
