@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import VideoFrame from "../components/VideoFrame";
 
 export default function ChatRoom() {
@@ -9,6 +10,8 @@ export default function ChatRoom() {
 
   const [messages, setMessages] = useState([]);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const websocketRef = useRef();
 
   useEffect(() => {
@@ -16,7 +19,9 @@ export default function ChatRoom() {
 
     setClient_id(date_client_id);
 
-    var ws = new WebSocket(`ws://localhost:8000/ws/${date_client_id}`);
+    var ws = new WebSocket(
+      `ws://localhost:8000/ws/${searchParams.get("room_id")}/${date_client_id}`
+    );
 
     websocketRef.current = ws;
 
