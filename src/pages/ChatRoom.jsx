@@ -20,7 +20,9 @@ export default function ChatRoom() {
     setClient_id(date_client_id);
 
     var ws = new WebSocket(
-      `ws://localhost:8000/ws/${searchParams.get("room_id")}/${date_client_id}`
+      `ws://localhost:8000/v1/ws/${searchParams.get(
+        "room_id"
+      )}/${date_client_id}`
     );
 
     websocketRef.current = ws;
