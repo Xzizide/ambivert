@@ -15,14 +15,12 @@ export default function ChatRoom() {
   const websocketRef = useRef();
 
   useEffect(() => {
-    var date_client_id = Date.now();
-
-    setClient_id(date_client_id);
+    setClient_id(searchParams.get("client_id"));
 
     var ws = new WebSocket(
       `ws://localhost:8000/v1/ws/${searchParams.get(
         "room_id"
-      )}/${date_client_id}`
+      )}/${searchParams.get("client_id")}`
     );
 
     websocketRef.current = ws;
@@ -76,15 +74,20 @@ export default function ChatRoom() {
                 ]);
               });
             } else {
-              var sending_id = event.data.slice(0, 13);
-              sending_id.text().then((text) => {
-                var blob_data = event.data.slice(13);
+              event.data.text().then((event_text) => {
+                var sending_id = event_text.slice(
+                  0,
+                  event_text.search("n4m3s3p4r4tor")
+                );
+                var blob_data = event.data.slice(
+                  event_text.search("n4m3s3p4r4tor") + 13
+                );
                 var blob = new Blob([blob_data], {
                   type: "video/webm; codecs=vp8",
                 });
                 setClients((prev) => ({
                   ...prev,
-                  [text]: URL.createObjectURL(blob),
+                  [sending_id]: URL.createObjectURL(blob),
                 }));
               });
             }

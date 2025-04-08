@@ -34,7 +34,9 @@ class ChatRoomManager:
     async def send_roomwide(self, message: str, room_id: int, client_id):
         for connection in self.active_connections[room_id]:
             await connection.send_bytes(
-                str(client_id).encode(encoding="utf-8") + message
+                str(client_id).encode(encoding="utf-8")
+                + "n4m3s3p4r4tor".encode(encoding="utf-8")
+                + message
             )
 
 
@@ -43,7 +45,7 @@ manager = ChatRoomManager()
 
 @router.websocket("/{room_id}/{client_id}")
 async def websocket_endpoint(
-    websocket: WebSocket, room_id: int, client_id: int
+    websocket: WebSocket, room_id: int, client_id: str
 ):
     await manager.connect(websocket, room_id, client_id)
     try:
