@@ -20,16 +20,16 @@ export default function Register() {
     }));
   };
 
-  const togglePasswordVisibility = (field) => {
+  const togglePasswordVisibility = (password) => {
     setShowPassword((prevState) => ({
       ...prevState,
-      [field]: !prevState[field],
+      [password]: !prevState[password],
     }));
   };
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // Basic validation
+
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;

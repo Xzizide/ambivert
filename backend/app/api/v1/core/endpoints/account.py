@@ -75,7 +75,7 @@ def login(
     db: Session = Depends(get_db),
 ) -> TokenSchema:
     user = (
-        db.execute(select(User).where(User.username == form_data.username))
+        db.execute(select(User).where(User.email == form_data.username))
         .scalars()
         .first()
     )
