@@ -27,16 +27,36 @@ export default function Register() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     // Basic validation
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    // Add registration logic here
-    console.log("Form submitted", formData);
-  };
+    const data = JSON.stringify({
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+    });
+    try {
+      const response = await fetch(
+        "http://localhost:8000/v1/account/user/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: data,
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP ERROR ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Failed to create user:", error);
+    }
+  }
 
   return (
     <main className="flex-auto bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center p-4">
@@ -105,13 +125,13 @@ export default function Register() {
               <button
                 type="button"
                 onClick={() => togglePasswordVisibility("password")}
-                className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-pink-600 transition-colors"
+                className={`absolute inset-y-3 right-1 flex items-center justify-center px-7  hover:text-pink-600 transition-colors ${
+                  showPassword.password
+                    ? "h-5 w-5 bg-pink-200 rounded-2xl text-black"
+                    : "h-5 w-5 bg-pink-600 rounded-2xl text-white"
+                }`}
               >
-                {showPassword.password ? (
-                  <button className="h-5 w-5 bg-black rounded-2xl" />
-                ) : (
-                  <button className="h-5 w-5 bg-gray-400 rounded-2xl" />
-                )}
+                {showPassword.password ? "Hide" : "Show"}
               </button>
             </div>
           </div>
@@ -137,13 +157,13 @@ export default function Register() {
               <button
                 type="button"
                 onClick={() => togglePasswordVisibility("confirmPassword")}
-                className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-pink-600 transition-colors"
+                className={`absolute inset-y-3 right-1 flex items-center justify-center px-7  hover:text-pink-600 transition-colors ${
+                  showPassword.confirmPassword
+                    ? "h-5 w-5 bg-pink-200 rounded-2xl text-black"
+                    : "h-5 w-5 bg-pink-600 rounded-2xl text-white"
+                }`}
               >
-                {showPassword.confirmPassword ? (
-                  <button className="h-5 w-5 bg-black rounded-2xl" />
-                ) : (
-                  <button className="h-5 w-5 bg-gray-400 rounded-2xl" />
-                )}
+                {showPassword.confirmPassword ? "Hide" : "Show"}
               </button>
             </div>
           </div>

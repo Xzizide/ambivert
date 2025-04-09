@@ -17,7 +17,7 @@ export default function Header() {
         </Link>
         <nav className="flex items-center space-x-6">
           <Link
-            to="/log-in"
+            to="/login"
             className="relative group text-pink-600 font-medium px-3 py-2 rounded-lg hover:bg-pink-100 transition-all duration-300 ease-in-out"
           >
             <span className="relative">

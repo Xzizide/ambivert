@@ -3,6 +3,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 router = APIRouter(tags=["ws"], prefix="/ws")
 
 
+# Manages the room functionality for the websocket so that people can join, leave and send messages to eachother in different groups
 class ChatRoomManager:
     def __init__(self):
         self.active_connections: dict[WebSocket] = {}
