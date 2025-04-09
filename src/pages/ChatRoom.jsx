@@ -59,6 +59,7 @@ export default function ChatRoom() {
         if (client_event[0] === '"disconnect"') {
           setClients((prev) => {
             var client_id = client_event[1];
+            client_id = client_id.slice(1, -1);
             const { [client_id]: _, ...rest } = prev;
             return rest;
           });
