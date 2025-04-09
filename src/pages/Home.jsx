@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -8,9 +9,12 @@ export default function Home() {
         <p className="text-gray-600 mb-8">Connect with strangers instantly!</p>
 
         <div className="space-y-4">
-          <button className="w-full bg-pink-500 text-white py-3 rounded-lg hover:bg-pink-600 transition-colors duration-300 font-semibold">
+          <Link
+            to="/chat?room_id=1&client_id=1"
+            className="w-full bg-pink-500 text-white py-3 rounded-lg hover:bg-pink-600 transition-colors duration-300 font-semibold"
+          >
             Start Chatting
-          </button>
+          </Link>
 
           <button className="w-full bg-gray-100 text-pink-600 py-3 rounded-lg hover:bg-gray-200 transition-colors duration-300 font-semibold">
             How It Works

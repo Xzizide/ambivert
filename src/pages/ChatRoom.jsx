@@ -94,6 +94,9 @@ export default function ChatRoom() {
           });
       }
     };
+    return () => {
+      ws.close();
+    };
   }, []);
 
   const [inputMessage, setInputMessage] = useState("");
