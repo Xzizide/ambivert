@@ -45,7 +45,7 @@ manager = ChatRoomManager()
 
 @router.websocket("/{room_id}/{client_id}")
 async def websocket_endpoint(
-    websocket: WebSocket, room_id: int, client_id: str
+    websocket: WebSocket, room_id: str, client_id: str
 ):
     await manager.connect(websocket, room_id, client_id)
     try:
