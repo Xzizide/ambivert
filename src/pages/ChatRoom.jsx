@@ -14,6 +14,8 @@ export default function ChatRoom() {
 
   const websocketRef = useRef();
 
+  const streamRef = useRef();
+
   useEffect(() => {
     setClient_id(searchParams.get("client_id"));
 
@@ -31,6 +33,7 @@ export default function ChatRoom() {
         audio: true,
       })
       .then((stream) => {
+        streamRef.current = stream;
         var mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.ondataavailable = async function (event) {
           if (event.data.size > 0 && ws.readyState === WebSocket.OPEN) {
@@ -96,6 +99,9 @@ export default function ChatRoom() {
     };
     return () => {
       ws.close();
+      streamRef.current.getTracks().forEach(function (track) {
+        track.stop();
+      });
     };
   }, []);
 
