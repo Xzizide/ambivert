@@ -101,4 +101,3 @@ def logout(
 ):
     db.execute(delete(Token).where(Token.token == current_token.token))
     db.commit()
-    return Response(status.HTTP_204_NO_CONTENT)

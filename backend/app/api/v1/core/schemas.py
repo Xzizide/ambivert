@@ -8,7 +8,6 @@ class CreateUserSchema(BaseModel):
 
 
 class UserResponseSchema(BaseModel):
-    id: int
     username: str
     email: str
 

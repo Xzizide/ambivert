@@ -1,7 +1,14 @@
 import React from "react";
 import { useState } from "react";
+import accountStorage from "../components/TokenStorage";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  let navigate = useNavigate();
+
+  const { setToken } = accountStorage();
+  const getClientData = accountStorage((state) => state.getClientData);
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -43,8 +50,13 @@ export default function Login() {
       );
       if (!response.ok) {
         throw new Error(`HTTP ERROR ${response.status}`);
+      } else {
+        const data = await response.json();
+        setToken(data.token);
+        getClientData().then(() => {
+          navigate("/");
+        });
       }
-      console.log(response);
     } catch (error) {
       console.error("Failed to log in user:", error);
     }

@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import accountStorage from "../components/TokenStorage";
 
 export default function Home() {
+  const { token } = accountStorage();
+  const clientData = accountStorage((state) => state.clientData);
+  const isLoggedIn = !!token;
+
   const [roomID, setRoomID] = useState("");
-  const [clientID, setClientID] = useState("");
+  const [clientID, setClientID] = useState(
+    isLoggedIn ? clientData.username : ""
+  );
   const [hasContent, setHasContent] = useState(false);
 
   useEffect(() => {

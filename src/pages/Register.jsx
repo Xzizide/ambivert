@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  let navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -52,6 +55,8 @@ export default function Register() {
       );
       if (!response.ok) {
         throw new Error(`HTTP ERROR ${response.status}`);
+      } else {
+        navigate("/login");
       }
     } catch (error) {
       console.error("Failed to create user:", error);
