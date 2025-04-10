@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, Depends, HTTPException, Response
+from fastapi import APIRouter, status, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from typing import Annotated
 from sqlalchemy import select, delete

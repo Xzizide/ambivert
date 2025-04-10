@@ -65,37 +65,33 @@ export default function ChatRoom() {
           });
         }
       } else if (typeof event.data === "object") {
-        event.data
-          .slice(22, 29)
-          .text()
-          .then((text) => {
-            if (text === "message") {
-              var message_blob = event.data.slice(13);
-              message_blob.text().then((message_content) => {
-                setMessages((prev) => [
-                  ...prev,
-                  JSON.parse(message_content).message,
-                ]);
-              });
-            } else {
-              event.data.text().then((event_text) => {
-                var sending_id = event_text.slice(
-                  0,
-                  event_text.search("n4m3s3p4r4tor")
-                );
-                var blob_data = event.data.slice(
-                  event_text.search("n4m3s3p4r4tor") + 13
-                );
-                var blob = new Blob([blob_data], {
-                  type: "video/webm; codecs=vp8",
-                });
-                setClients((prev) => ({
-                  ...prev,
-                  [sending_id]: URL.createObjectURL(blob),
-                }));
-              });
-            }
-          });
+        event.data.text().then((text) => {
+          var name_separation_index = text.search("n4m3s3p4r4tor");
+          if (
+            text.slice(
+              name_separation_index + 22,
+              name_separation_index + 29
+            ) === "message"
+          ) {
+            var message_blob = event.data.slice(name_separation_index + 13);
+            message_blob.text().then((message_content) => {
+              setMessages((prev) => [
+                ...prev,
+                JSON.parse(message_content).message,
+              ]);
+            });
+          } else {
+            var sending_id = text.slice(0, name_separation_index);
+            var blob_data = event.data.slice(name_separation_index + 13);
+            var blob = new Blob([blob_data], {
+              type: "video/webm; codecs=vp8",
+            });
+            setClients((prev) => ({
+              ...prev,
+              [sending_id]: URL.createObjectURL(blob),
+            }));
+          }
+        });
       }
     };
     return () => {
@@ -137,47 +133,45 @@ export default function ChatRoom() {
   }, [messages]);
 
   return (
-    <main className="bg-amber-50 flex-auto flex">
+    <main className="bg-pink-100 flex-auto flex">
       <div className="grid grid-cols-3 gap-3 m-3">
         {Object.entries(clients).map(([id, blob]) => {
           return <VideoFrame key={id} client_id={id} src={blob}></VideoFrame>;
         })}
       </div>
 
-      <div>
-        <div className="max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden">
-          <div className="p-4 h-64 overflow-y-auto">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`mb-2 p-2 rounded-lg max-w-[80%] ${
-                  message.sender === client_id
-                    ? "bg-blue-500 text-white self-end ml-auto"
-                    : "bg-gray-200 text-black mr-auto"
-                }`}
-              >
-                {message.sender}: {message.text}
-              </div>
-            ))}
-            <div ref={bottomMessagesRef}></div>
-          </div>
-
-          <div className="flex p-4 border-t border-gray-200">
-            <input
-              type="text"
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Type a message..."
-              className="flex-grow mr-2 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-              onClick={handleSendMessage}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+      <div className=" w-100 mx-auto mr-0 bg-white overflow-hidden">
+        <div className="p-4 h-9/10 overflow-y-auto">
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              className={`mb-2 p-2 rounded-lg max-w-[80%] ${
+                message.sender === client_id
+                  ? "bg-pink-500 text-white self-end ml-auto"
+                  : "bg-gray-200 text-black mr-auto"
+              }`}
             >
-              Send
-            </button>
-          </div>
+              {message.sender}: {message.text}
+            </div>
+          ))}
+          <div ref={bottomMessagesRef}></div>
+        </div>
+
+        <div className="flex p-4 border-t border-gray-200">
+          <input
+            type="text"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Type a message..."
+            className="flex-grow mr-2 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-100 block text-sm font-medium text-gray-700"
+          />
+          <button
+            onClick={handleSendMessage}
+            className="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition-colors"
+          >
+            Send
+          </button>
         </div>
       </div>
     </main>
