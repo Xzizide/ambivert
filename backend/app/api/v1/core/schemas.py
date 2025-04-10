@@ -7,6 +7,10 @@ class CreateUserSchema(BaseModel):
     password: str
 
 
+class ModifyUserSchema(BaseModel):
+    username: str
+
+
 class UserResponseSchema(BaseModel):
     username: str
     email: str

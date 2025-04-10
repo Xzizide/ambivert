@@ -35,9 +35,18 @@ export default function Header() {
         </Link>
         {isLoggedIn ? (
           <nav className="flex items-center space-x-6">
-            <p className="text-pink-600 font-medium mr-10">
+            <p className="text-pink-600 font-bold mr-10">
               Welcome {clientData && clientData.username}
             </p>
+            <Link
+              to="/modifyuser"
+              className="relative group text-pink-600 font-medium px-3 py-2 rounded-lg hover:bg-pink-100 transition-all duration-300 ease-in-out"
+            >
+              <span className="relative">
+                Change username
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-pink-600 transition-all duration-300 group-hover:w-full"></span>
+              </span>
+            </Link>
             <button
               onClick={() => logoutClient()}
               className="relative group text-pink-600 font-medium px-3 py-2 rounded-lg hover:bg-pink-100 transition-all duration-300 ease-in-out cursor-pointer"

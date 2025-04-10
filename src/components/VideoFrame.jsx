@@ -24,7 +24,7 @@ export default function VideoFrame({ client_id, src }) {
   }, []);
 
   return (
-    <div className="relative w-64 h-48 border-2 border-gray-400 rounded-lg overflow-hidden">
+    <div className="relative w-80 h-60 border-2 border-gray-400 rounded-lg overflow-hidden">
       <video
         ref={ref}
         src={src}
@@ -35,7 +35,7 @@ export default function VideoFrame({ client_id, src }) {
 
       <button
         onClick={handleMuteAudio}
-        className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs"
+        className="absolute bottom-2 left-2 bg-pink-600 bg-opacity-50 text-white px-2 py-1 rounded-md text-xs"
       >
         {muteAudioText}
       </button>

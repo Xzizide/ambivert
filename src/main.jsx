@@ -6,6 +6,7 @@ import Home from "./pages/Home.jsx";
 import ChatRoom from "./pages/ChatRoom.jsx";
 import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
+import ModifyUser from "./pages/ModifyUser.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/modifyuser",
+        element: <ModifyUser />,
       },
     ],
   },

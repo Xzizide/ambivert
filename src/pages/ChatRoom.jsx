@@ -134,14 +134,14 @@ export default function ChatRoom() {
 
   return (
     <main className="bg-pink-100 flex-auto flex">
-      <div className="grid grid-cols-3 gap-3 m-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 m-20">
         {Object.entries(clients).map(([id, blob]) => {
           return <VideoFrame key={id} client_id={id} src={blob}></VideoFrame>;
         })}
       </div>
 
-      <div className=" w-100 mx-auto mr-0 bg-white overflow-hidden">
-        <div className="p-4 h-9/10 overflow-y-auto">
+      <div className="w-100 mx-auto mr-0 bg-white flex flex-col max-h-177">
+        <div className="p-4 flex-grow overflow-y-auto">
           {messages.map((message) => (
             <div
               key={message.id}
