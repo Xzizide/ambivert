@@ -7,22 +7,22 @@ export default function Home() {
   const clientData = accountStorage((state) => state.clientData);
   const isLoggedIn = !!token;
 
-  const [roomID, setRoomID] = useState("");
+  const [personalDescription, setPersonalDescription] = useState("");
   const [clientID, setClientID] = useState(
     isLoggedIn ? clientData.username : ""
   );
   const [hasContent, setHasContent] = useState(false);
 
   useEffect(() => {
-    setHasContent(roomID.trim() !== "" && clientID.trim() !== "");
-  }, [roomID, clientID]);
+    setHasContent(personalDescription.trim() !== "" && clientID.trim() !== "");
+  }, [personalDescription, clientID]);
 
   const joinChatRoom = (e) => {
     e.preventDefault();
 
-    const url = `http://localhost:5173/chat?room_id=${encodeURIComponent(
-      roomID
-    )}&client_id=${encodeURIComponent(clientID)}`;
+    const url = `http://localhost:5173/chat?client_id=${encodeURIComponent(
+      clientID
+    )}&personal_description=${encodeURIComponent(personalDescription)}`;
 
     window.location.href = url;
   };
@@ -35,21 +35,7 @@ export default function Home() {
 
         <div className="space-y-4">
           <form onSubmit={joinChatRoom}>
-            <label
-              htmlFor="roomID"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Room Name
-            </label>
-            <input
-              id="roomID"
-              type="text"
-              value={roomID}
-              onChange={(e) => setRoomID(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
-              placeholder="Enter room name"
-            />
-            <label
+          <label
               htmlFor="clientID"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
@@ -60,8 +46,22 @@ export default function Home() {
               type="text"
               value={clientID}
               onChange={(e) => setClientID(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
               placeholder="Enter nickname"
+            />
+            <label
+              htmlFor="personalDescription"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Personal Description
+            </label>
+            <input
+              id="personalDescription"
+              type="text"
+              value={personalDescription}
+              onChange={(e) => setPersonalDescription(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+              placeholder="Enter personal description"
             />
             <button
               type="submit"
